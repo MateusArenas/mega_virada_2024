@@ -61,8 +61,34 @@
       <input class="cell num" type="text" name="n6" placeholder="00" maxlength="2" minlength="1">
     </div>
 
-    <button type="submit">Consultar</button>
+    <button id="submit" type="submit">Consultar</button>
   </form>
+
+  <script>
+    var submit = document.getElementById('submit');
+      var numEls = document.getElementsByClassName('num');
+
+      for (let i = 0; i < numEls.length; i++) {
+        var numEl = numEls[i];
+
+        numEl.addEventListener('keyup', function(e) {
+          var val = e.target.value;
+
+          console.log({ e });
+
+          if (!Number.isNaN(+e.key)) {
+            if (val.length == 2) {
+              if (i != numEls.length-1) {
+                numEls[i+1].focus();
+              } else {
+                submit.focus();
+              }
+            }
+          }
+
+        })
+      }
+  </script>
   
   <script>
 
