@@ -326,7 +326,7 @@
           return alert('Está faltando um número!');
         }
 
-        if (Number.isNaN(num)) {
+        if (Number.isNaN(num) || +num > 60) {
           return alert('Número invalido!');
         }
 
