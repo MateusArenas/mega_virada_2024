@@ -46,7 +46,8 @@
     }
     
     button {
-      padding: 24px;
+      padding: 12px 24px;
+      margin-top: 24px;
     }
   </style>
 </head>
@@ -296,6 +297,17 @@
 
     var formEl = document.getElementById("form");
 
+    function hasDuplicates(array) {
+      for (let i = 0; i < array.length; i++) {
+        for (let j = i + 1; j < array.length; j++) {
+          if (array[i] === array[j]) {
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+
     formEl.addEventListener('submit', function(e) {
       e.preventDefault();
 
@@ -326,6 +338,10 @@
       for (let i = 0; i < apostas.length; i++) {
         let acertos = 0; 
 
+        if (hasDuplicates(resultado.map(val => +val))) {
+          return alert('Não é permitido repetir números!');
+        }
+
         for (const premiado of resultado) {
           var acertou = apostas[i].numeros.find(num => +num == +premiado);
           if (acertou) acertos += 1;
@@ -336,12 +352,17 @@
         switch (acertos) {
           case 6:
             acertamos_6 = true;
+            console.log({ aposta: apostas[i] });
             break;
           case 5:
             acertamos_5 = true;
+            console.log({ aposta: apostas[i] });
+
             break;
           case 4:
             acertamos_4 = true;
+            console.log({ aposta: apostas[i] });
+
             break;
           default:
             break;
