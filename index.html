@@ -71,17 +71,26 @@
       for (let i = 0; i < numEls.length; i++) {
         var numEl = numEls[i];
 
-        numEl.addEventListener('keyup', function(e) {
+        numEl.addEventListener('keydown', function (e) {
           var val = e.target.value;
 
-          console.log({ e });
+
+          if (e.key === 'Backspace') {
+            if (!val.length && i != 0) {
+              numEls[i-1].focus();
+            } 
+          }
+        })
+
+        numEl.addEventListener('keyup', function(e) {
+          var val = e.target.value;
 
           if (!Number.isNaN(+e.key)) {
             if (val.length == 2) {
               if (i != numEls.length-1) {
                 numEls[i+1].focus();
               } else {
-                submit.focus();
+                // submit.focus();
               }
             }
           }
