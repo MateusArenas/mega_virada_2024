@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificador de resultado da Mega Sena da virada</title>
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+    
+    .cell {
+      width: 40px;
+      height: 40px;
+      border: 1px gray solid;
+    }
+
+    h1 { 
+      padding: 20px; 
+    }
+
+    .row {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-top: 20px;
+    }
+    
+    button {
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  
+  <form id="form">
+    <h1 style="text-align: center;">Insira os números sorteados</h1>
+
+    <div class="row">
+      <input class="cell num" type="text" name="n1" placeholder="00" maxlength="2" minlength="1">
+      <input class="cell num" type="text" name="n2" placeholder="00" maxlength="2" minlength="1">
+      <input class="cell num" type="text" name="n3" placeholder="00" maxlength="2" minlength="1">
+      <input class="cell num" type="text" name="n4" placeholder="00" maxlength="2" minlength="1">
+      <input class="cell num" type="text" name="n5" placeholder="00" maxlength="2" minlength="1">
+      <input class="cell num" type="text" name="n6" placeholder="00" maxlength="2" minlength="1">
+    </div>
+
+    <button type="submit">Consultar</button>
+  </form>
+  
+  <script>
+
+    var apostas = [
+      { pessoa: "Dan Castanho", numeros: [1, 4, 8, 15, 44, 55], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [3, 25, 33, 35, 46, 49], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [2, 4, 25, 41, 45, 54], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [17, 25, 34, 36, 47, 49], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [4, 16, 18, 39, 40, 52], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [5, 9, 16, 21, 40, 56], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [4, 28, 31, 41, 50, 58], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [14, 18, 24, 34, 45, 58], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [2, 5, 13, 35, 40, 43], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [4, 7, 8, 9, 11, 30], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [6, 12, 20, 42, 45, 58], acertos: 0 },
+      { pessoa: "Dan Castanho", numeros: [17, 20, 22, 24, 56, 57], acertos: 0 },
+
+      { pessoa: "Bruno Calvo", numeros: [3, 10, 22, 27, 41, 54], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [4, 23, 36, 46, 47, 52], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [1, 2, 15, 18, 26, 32], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [8, 16, 21, 32, 46, 49], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [7, 12, 28, 29, 30, 40], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [11, 21, 28, 38, 49, 60], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [3, 7, 14, 15, 20, 25], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [22, 23, 25, 28, 56, 59], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [4, 5, 33, 34, 51, 53], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [10, 12, 26, 31, 44, 54], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [2, 6, 15, 32, 33, 43], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [7, 21, 30, 45, 51, 56], acertos: 0 },
+      { pessoa: "Bruno Calvo", numeros: [9, 20, 24, 37, 48, 53], acertos: 0 },
+
+      { pessoa: "Robertin", numeros: [4, 23, 25, 32, 44, 60], acertos: 0 },
+      { pessoa: "Robertin", numeros: [7, 21, 29, 39, 48, 56], acertos: 0 },
+      { pessoa: "Robertin", numeros: [2, 16, 26, 27, 42, 58], acertos: 0 },
+      { pessoa: "Robertin", numeros: [10, 13, 28, 32, 50, 57], acertos: 0 },
+      { pessoa: "Robertin", numeros: [18, 30, 38, 41, 43, 44], acertos: 0 },
+      { pessoa: "Robertin", numeros: [15, 26, 29, 33, 47, 49], acertos: 0 },
+      { pessoa: "Robertin", numeros: [3, 14, 20, 21, 39, 50], acertos: 0 },
+      { pessoa: "Robertin", numeros: [20, 26, 50, 52, 56, 60], acertos: 0 },
+      { pessoa: "Robertin", numeros: [7, 18, 28, 33, 36, 40], acertos: 0 },
+      { pessoa: "Robertin", numeros: [4, 13, 16, 43, 52, 59], acertos: 0 },
+      { pessoa: "Robertin", numeros: [6, 10, 13, 17, 34, 50], acertos: 0 },
+      { pessoa: "Robertin", numeros: [8, 11, 25, 38, 40, 47], acertos: 0 },
+
+      { pessoa: "João", numeros: [12, 13, 17, 18, 33, 38], acertos: 0 },
+      { pessoa: "João", numeros: [6, 15, 39, 40, 42, 55], acertos: 0 },
+      { pessoa: "João", numeros: [11, 15, 18, 22, 40, 55], acertos: 0 },
+      { pessoa: "João", numeros: [7, 16, 30, 38, 40, 41], acertos: 0 },
+      { pessoa: "João", numeros: [10, 20, 32, 35, 55, 56], acertos: 0 },
+      { pessoa: "João", numeros: [4, 5, 17, 22, 43, 59], acertos: 0 },
+      { pessoa: "João", numeros: [20, 29, 38, 41, 43, 58], acertos: 0 },
+      { pessoa: "João", numeros: [10, 33, 45, 52, 54, 57], acertos: 0 },
+      { pessoa: "João", numeros: [5, 7, 19, 20, 43, 57], acertos: 0 },
+      { pessoa: "João", numeros: [10, 11, 14, 30, 53, 59], acertos: 0 },
+      { pessoa: "João", numeros: [5, 6, 15, 28, 32, 40], acertos: 0 },
+      { pessoa: "João", numeros: [5, 8, 10, 24, 35, 54], acertos: 0 },
+    ];
+
+
+    var csv = `03,10,22,27,41,54
+04,23,36,46,47,52
+01,02,15,18,26,32
+08,16,21,32,46,49
+07,12,28,29,30,40
+11,21,28,38,49,60
+03,07,14,15,20,25
+22,23,25,28,56,59
+04,05,33,34,51,53
+10,12,26,31,44,54
+02,06,15,32,33,43
+07,21,30,45,51,56
+09,20,24,37,48,53
+10,17,18,21,29,60
+08,12,24,26,44,48
+08,11,19,21,24,60
+07,08,28,35,38,45
+05,25,37,42,48,58
+05,22,23,44,49,60
+05,10,14,16,23,48
+04,19,28,40,41,42
+04,10,15,24,29,46
+02,13,23,52,53,58
+01,33,36,40,41,45
+01,12,34,37,49,56
+04,23,25,32,44,60
+07,21,29,39,48,56
+02,16,26,27,42,58
+10,13,28,32,50,57
+18,30,38,41,43,44
+15,26,29,33,47,49
+03,14,20,21,39,50
+20,26,50,52,56,60
+07,18,28,33,36,40
+04,13,16,43,52,59
+06,10,13,17,34,50
+08,11,25,38,40,47
+16,17,32,39,43,49
+03,17,31,37,45,52
+26,30,32,37,41,45
+15,20,27,36,47,48
+05,20,25,30,36,60
+08,15,21,23,47,56
+09,14,21,40,52,58
+49,51,53,55,57,59
+04,24,25,29,48,55
+06,07,10,21,29,55
+02,04,07,09,12,13
+15,19,20,23,24,36
+12,13,17,18,33,38
+06,15,39,40,42,55
+11,15,18,22,40,55
+07,16,30,38,40,41
+10,20,32,35,55,56
+04,05,17,22,43,59
+20,29,38,41,43,58
+10,33,45,52,54,57
+05,07,19,20,43,57
+10,11,14,30,53,59
+05,06,15,28,32,40
+05,08,10,24,35,54
+01,04,08,15,44,55
+03,25,33,35,46,49
+02,04,25,41,45,54
+17,25,34,36,47,49
+04,16,18,39,40,52
+05,09,16,21,40,56
+04,28,31,41,50,58
+14,18,24,34,45,58
+02,05,13,35,40,43
+04,07,08,09,11,30
+06,12,20,42,45,58
+17,20,22,24,56,57
+13,22,27,38,50,56
+07,11,34,35,47,51
+08,27,28,35,44,53
+01,07,16,23,36,59
+08,11,13,16,22,38
+03,07,10,24,33,55
+05,23,25,27,35,57
+19,21,29,30,41,52
+04,05,29,41,52,59
+01,08,14,32,47,49
+05,10,19,28,34,50
+01,07,12,38,42,51
+12,13,17,18,33,38
+06,15,39,40,42,55
+11,15,18,22,40,55
+07,16,30,38,40,41
+10,20,32,35,55,56
+04,05,17,22,43,59
+20,29,38,41,43,58
+10,33,45,52,54,57
+05,07,19,20,43,57
+10,11,14,30,53,59
+05,06,15,28,32,40
+05,08,10,24,35,54
+01,04,08,15,44,55
+03,25,33,35,46,49
+02,04,25,41,45,54
+17,25,34,36,47,49
+04,16,18,39,40,52
+05,09,16,21,40,56
+04,28,31,41,50,58
+14,18,24,34,45,58
+02,05,13,35,40,43
+04,07,08,09,11,30
+06,12,20,42,45,58
+17,20,22,24,56,57`;
+    function csvToArray(csv) {
+      const rows = csv.split('\n');
+      const result = [];
+
+      for (const row of rows) {
+        const values = row.split(',');
+        result.push(values);
+      }
+
+      return result;
+    }
+
+
+    var apostas = csvToArray(csv);
+    console.log(apostas);
+
+    console.log(apostas.length);
+
+    var apostas = apostas.map(aposta => ({
+      pessoa: "qualquer", numeros: aposta, acertos: 0 
+    }));
+
+    
+    var resultado = [2,3,4,5,6,7];
+
+    var formEl = document.getElementById("form");
+
+    formEl.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var numEls = document.getElementsByClassName('num');
+
+      var nums = [];
+
+      for (let i = 0; i < numEls.length; i++) {
+        var num = +numEls[i].value;
+
+        if (!num) {
+          return alert('Está faltando número!');
+        }
+
+        if (Number.isNaN(num)) {
+          return alert('Número invalido!');
+        }
+
+        nums[i] = num;
+      }
+
+      resultado = nums;
+
+      var acertamos_6 = false;
+      var acertamos_5 = false;
+      var acertamos_4 = false;
+
+      for (let i = 0; i < apostas.length; i++) {
+        let acertos = 0; 
+
+        for (const premiado of resultado) {
+          var acertou = apostas[i].numeros.find(num => +num == +premiado);
+          if (acertou) acertos += 1;
+        }
+      
+        apostas[i].acertos = acertos;
+      
+        switch (acertos) {
+          case 6:
+            acertamos_6 = true;
+            break;
+          case 5:
+            acertamos_5 = true;
+            break;
+          case 4:
+            acertamos_4 = true;
+            break;
+          default:
+            break;
+        }
+      }
+
+      if (acertamos_6) {
+        alert('Acertou os 6 números! :)');
+      }
+
+      if (acertamos_5) {
+        alert('Acertou os 5 números! :)');
+      }
+
+      if (acertamos_4) {
+        alert('Acertou os 4 números! :)');
+      }
+
+      if (!acertamos_4 && !acertamos_5 && !acertamos_6) {
+
+        alert('Pobres :(')
+      }
+
+    });
+    
+  </script>
+</body>
+</html>
