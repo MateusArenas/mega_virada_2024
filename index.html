@@ -319,7 +319,11 @@
         var num = +numEls[i].value;
 
         if (!num) {
-          return alert('Está faltando número!');
+          let faltam_total = [...numEls].reduce((acc, val) => acc+(val?.value ? 0 : 1), 0);
+          if (faltam_total> 1) {
+            return alert(`Está faltando ${faltam_total} números!`);
+          }
+          return alert('Está faltando um número!');
         }
 
         if (Number.isNaN(num)) {
